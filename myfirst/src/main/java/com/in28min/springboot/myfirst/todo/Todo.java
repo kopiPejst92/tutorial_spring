@@ -2,17 +2,28 @@ package com.in28min.springboot.myfirst.todo;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 
-public class ToDo {
+@Entity
+public class Todo {
+	@Id
+	@GeneratedValue
 	private int id;
+	
 	private String username;
 	@Size(min=10, message="Cannot be shorter than 10 characters")
 	private String description;
 	private LocalDate deadline;
 	private boolean done;
 	
-	public ToDo(int id, String username, String description, LocalDate deadline, boolean done) {
+	public Todo() {
+		
+	}
+	
+	public Todo(int id, String username, String description, LocalDate deadline, boolean done) {
 		super();
 		this.id = id;
 		this.username = username;

@@ -15,22 +15,25 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import jakarta.validation.Valid;
 
-//@Controller - archive version
+@Controller
 @SessionAttributes("name")
-public class ToDoController {
+public class ToDoControllerJpa {
 	
 	private ToDoService todoService;
+	
+	private TodoRepository todoRepository;
 		
-	public ToDoController(ToDoService todoService) {
+	public ToDoControllerJpa(ToDoService todoService, TodoRepository todoRepository) {
 		super();
 		this.todoService = todoService;
+		this.todoRepository = todoRepository;
 	}
 
 
 	 @RequestMapping("all-todos")
 	public String listAllTodos(ModelMap model) {
 		 String username=getLoggedInUsername(model);
-		 List<Todo> todos=todoService.findByUsername(username);
+		 List<Todo> todos = todoRepository.findByUsername(username);
 		 model.addAttribute("todos", todos);
 		 return "listTodos";
 	}
@@ -52,7 +55,10 @@ public class ToDoController {
 			return "todo";
 		}
 		String username= getLoggedInUsername(model);
-		todoService.addTodo(username, todo.getDescription(), todo.getDeadline(), false);
+		
+		todo.setUsername(username);
+		todoRepository.save(todo);
+		
 		return "redirect:all-todos";
 	}
 	
